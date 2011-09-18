@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Nightfall - a HTML5 shooter game</title>
+	<style type="text/css">	
+	body {
+		background-color: #090909;
+		color: #fff;
+		font: normal 10pt arial, verdana, sans-serif;
+		margin: 0;
+	}
+	canvas {
+			position:absolute;
+			left:0px;
+			top:0px;
+			cursor: crosshair;
+			border: 1px solid #333;			
+	}	   
+	
+	#game{
+		z-index: 1;		
+	}
+	
+	#light{
+		z-index: 2;
+	}
+	
+	#gui{
+		z-index: 3;
+	}
+	
+	#canvas-container{
+		position: relative;
+		height: 480px;
+		width: 640px;
+		margin-top:30px;
+		margin-bottom:30px;
+	}
+	
+	#wrapper{
+		width: 640px;
+		margin: 0 auto;
+	}
+	
+	.smaller {
+		font-size: 0.8em;
+	}
+	
+	#credits dt{
+		margin-top: 5px;
+	}
+	
+	.warning {
+		background: #fff6bf;
+		background-position: 15px 50%; 
+		text-align: left;
+		padding: 5px 20px 5px 45px;
+		border-top: 2px solid #ffd324;
+		border-bottom: 2px solid #ffd324;
+		color: #000;
+	}
+	
+	.warning p{		
+		width: 300px;
+		background:  url(images/exclamation_mark.gif) left 50% no-repeat;
+		margin: 0 auto;
+		text-align:center;
+	}
+
+	</style>
+</head>
+<body>
+<noscript> 
+	<div class="warning">
+		<p>Please enable JavaScript to run the game.</p>		
+	</div>
+</noscript>
+<div id="wrapper">
+	<div id="canvas-container">		
+		<canvas width="640" height="480" id="game"><div class="warning"><div>Your browser does not support HTML5. This page is viewed best with <a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.mozilla.com/firefox/">Firefox</a> or <a href="http://www.apple.com/safari/">Safari</a>.</div></div></canvas>
+		<canvas width="640" height="480" id="light"></canvas>
+		<canvas width="640" height="480" id="gui"></canvas>		
+		<div id="loadingmask"></div>
+	</div>
+	<div>Shoot: Left Mouse, Reload: R, Flashlight: Space, Move: WASD</div>
+	<h1>Compatibility</h1>
+	<div>
+		<ul>
+			<li>Firefox 4.0.1 - 6.0.2: Good</li>
+			<li>Chrome 11: Seems good</li>
+			<li>Safari 5: Some sounds are not working yet (not converted to mp3)</li>
+			<li>IE 9: Currently broken</li>
+		</ul>
+	</div>
+	<div id="credits">
+		<h1>Credits</h1>	
+		<dl>
+			<dt>			
+				<span class="smaller">Powered by</span><br/><a href="http://www.propulsionjs.com/"><img src="images/propulsion.png" /></a>
+			</dt>
+			<dt>Programming, Graphics:</dt><dd>Janosch Woschitz</dd>
+			<dt>Music:</dt><dd><a href="http://opengameart.org/users/brandon-morris">Brandon Morris</a></dd>
+			<dt>Sounds:</dt><dd><a href="http://opengameart.org/users/brandon-morris">Brandon Morris</a></dd>
+			<dt>Textures (Tilemap)</dt><dd><a href="http://www.lostgarden.com/">lostgarden.com</a></dd>
+			<dt>Menu Screen</dt><dd><a href="https://skull.deviantart.com/">Mike Skull</a></dd>			
+		</div>
+	</div>
+</div>
+</body>
+<script src="propulsion_1.2.js" type="text/javascript"></script>
+<script src="game.js" type="text/javascript"></script>
+</html>
