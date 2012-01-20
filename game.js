@@ -69,6 +69,15 @@
 		return this;
 	};
 	
+	var MockSoundManager = function(){
+		this.add = function(){
+		
+		};
+		this.play = function(){
+		
+		};
+	}
+	
 	var SoundLoop = function(name, url){
 		var audioObj = new Sound(url);
 		this.channel = {};		
@@ -94,6 +103,15 @@
 			audioObj.pause();
 		}
 		return this;
+	}
+	
+	var MockSoundLoop = function(){
+		this.play = function(){
+		
+		};
+		this.stop = function(){
+		
+		};
 	}
 	
 	var Rotation = function(radians){
@@ -160,7 +178,8 @@
 	spr.menubg = new Sprite('sprites/menu.png',1,0,0);
 	
 	//SOUND
-	snd.manager = new SoundManager(10);
+	snd.manager = (browser.safari) ?  new MockSoundManager() : new SoundManager(10);
+	
 	
 	(function(){
 		var audioFileExtension = (browser.mozilla) ? 'ogg' : 'mp3';
@@ -180,7 +199,7 @@
 		snd.manager.add('pistol_empty',getAudioUrl('sounds/pistol_empty.{ext}'));
 		snd.manager.add('pistol_reload',getAudioUrl('sounds/pistol_reload.{ext}'));
 		snd.loops = {};
-		snd.loops.ambient = new SoundLoop('ambient',getAudioUrl('sounds/e.{ext}'));	
+		snd.loops.ambient = (browser.safari) ?  new MockSoundLoop() : new SoundLoop('ambient',getAudioUrl('sounds/e.{ext}'));	
 	}());
 	
 	load(function() {
