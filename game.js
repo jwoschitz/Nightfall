@@ -1458,7 +1458,8 @@
 				snd.manager.play('nightfall', 0.6);
 			},
 			tick: function(t) {
-				if (key.enter.down) {
+				if (key.enter.down||startGameByTouchEvent) {
+					startGameByTouchEvent = false;
 					loop.room = rm.play;
 				}
 			},
@@ -1486,10 +1487,27 @@
 		loop.room = rm.gameMenu;
 	});
 	
+	/* hacky approach to enable game start on mobile devices */
+	var startGameByTouchEvent = false;
+	
+	var onLoadCompleted = function(){
+		alert(1);
+		document.body.addEventListener("touchstart",	function(evt) {
+			alert(2);
+				if(evt.touches && evt.length > 0){
+					alert(3);
+					startGameByTouchEvent = true;
+				}
+			}, 
+			false
+		);
+	}
+	
 	var loadingBar = document.getElementById('loadingmask');
 	var showLoadStatus = function(){
 		if(load.total == load.completed){
 			loadingBar.innerHTML = 'Completed';
+			onLoadCompleted();
 			return;
 		}
 		loadingBar.innerHTML = 'Loading - ' + load.completed + ' of ' + load.total;
