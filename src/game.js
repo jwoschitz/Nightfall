@@ -22,7 +22,7 @@
  *	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  *	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-(function() {
+define(["propulsion_1.2"], function(PP) {
 	var spr=PP.spr,rm=PP.rm,obj=PP.obj,snd=PP.snd,al=PP.al,global=PP.global,Alarm=PP.Alarm,collision=PP.collision,draw=PP.draw,init=PP.init,key=PP.key,load=PP.load,loop=PP.loop,mouse=PP.mouse,physics=PP.physics,Sound=PP.Sound,SoundEffect=PP.SoundEffect,Sprite=PP.Sprite;
 	
 	var userAgent = navigator.userAgent.toLowerCase();
@@ -1513,6 +1513,11 @@
 		loadingBar.innerHTML = 'Loading - ' + load.completed + ' of ' + load.total;
 		setTimeout(showLoadStatus, 30);
 	}
-	showLoadStatus();
-
-}());
+  
+  return {
+    init: function(){      
+      load(onGameLoaded);
+      showLoadStatus();
+    }
+  }
+});
