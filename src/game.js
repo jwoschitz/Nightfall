@@ -22,97 +22,8 @@
  *	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  *	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-define(["propulsion_1.2"], function(PP) {
-	var spr=PP.spr,rm=PP.rm,obj=PP.obj,snd=PP.snd,al=PP.al,global=PP.global,Alarm=PP.Alarm,collision=PP.collision,draw=PP.draw,init=PP.init,key=PP.key,load=PP.load,loop=PP.loop,mouse=PP.mouse,physics=PP.physics,Sound=PP.Sound,SoundEffect=PP.SoundEffect,Sprite=PP.Sprite;
-	
-	var userAgent = navigator.userAgent.toLowerCase();
-	
-	var browser = {
-		version: (userAgent.match( /.+(?:rv|it|ra|ie|me)[\/: ]([\d.]+)/ ) || [])[1],
-		chrome: /chrome/.test( userAgent ),
-		safari: /webkit/.test( userAgent ) && !/chrome/.test( userAgent ),
-		opera: /opera/.test( userAgent ),
-		msie: /msie/.test( userAgent ) && !/opera/.test( userAgent ),
-		mozilla: /mozilla/.test( userAgent ) && !/(compatible|webkit)/.test( userAgent )
-	};
-	
-	var SoundManager = function(maxChannels){
-		this.audiochannels = [];
-		this.sounds = {};
-		for (var i=0;i<maxChannels;i++) {									
-			this.audiochannels[i] = {
-				audioObj: new Audio(),
-				finished: -1
-			};
-		}
-		this.getAudioObj = function(name){
-			return this.sounds[name];
-		};
-		this.add = function(name, url){
-			this.sounds[name] = new Sound(url);
-		};
-		this.play = function(name, volume){		
-			var audioObj = this.sounds[name];
-			for (var i=0;i<this.audiochannels.length;i++) {
-				thistime = new Date();
-				var channel = this.audiochannels[i];
-				if (channel.finished < thistime.getTime()) { // is this channel finished?
-					channel.finished = thistime.getTime() + audioObj.duration * 1000;
-					channel.audioObj.src = audioObj.src;
-					channel.audioObj.load();
-					channel.audioObj.volume = volume || 1.0;
-					channel.audioObj.play();
-					return channel;
-				}
-			}
-		};
-		return this;
-	};
-	
-	var MockSoundManager = function(){
-		this.add = function(){
-		
-		};
-		this.play = function(){
-		
-		};
-	}
-	
-	var SoundLoop = function(name, url){
-		var audioObj = new Sound(url);
-		this.channel = {};		
-		this.channel.audioObj = audioObj;
-		this.channel.finished = (new Date()).getTime() + audioObj.duration * 1000;
-		var repeat = function(){
-			this.channel.audioObj.currentTime = 0;
-			this.channel.audioObj.play();	
-		};
-		this.play = function(volume){
-			var audioObj = this.channel.audioObj;
-			audioObj.volume = volume || 1.0;
-			audioObj.play();
-			audioObj.addEventListener('ended', function(){
-				this.currentTime = 0;
-				this.play();	
-			}, false);
-			return this.channel;
-		};
-		this.stop = function(){
-			var audioObj = this.channel.audioObj			
-			audioObj.currentTime = 0;
-			audioObj.pause();
-		}
-		return this;
-	}
-	
-	var MockSoundLoop = function(){
-		this.play = function(){
-		
-		};
-		this.stop = function(){
-		
-		};
-	}
+define(["propulsion_1.2","sound/sound"], function(PP, sound) {
+	var spr=PP.spr,rm=PP.rm,obj=PP.obj,snd=PP.snd,global=PP.global,Alarm=PP.Alarm,collision=PP.collision,draw=PP.draw,init=PP.init,key=PP.key,load=PP.load,loop=PP.loop,mouse=PP.mouse,Sprite=PP.Sprite;
 	
 	var Rotation = function(radians){
 		this.radians = radians || 0;
@@ -146,7 +57,7 @@ define(["propulsion_1.2"], function(PP) {
 			return obj;
 		};
 	}
-	
+  
 	var move = {
 		direction: function(obj,angle,length, precise) {
 			obj.x += Math.cos(angle)*length;
@@ -178,31 +89,9 @@ define(["propulsion_1.2"], function(PP) {
 	spr.menubg = new Sprite('sprites/menu.png',1,0,0);
 	
 	//SOUND
-	snd.manager = (browser.safari) ?  new MockSoundManager() : new SoundManager(10);
+  snd = sound;
 	
-	
-	(function(){
-		var audioFileExtension = (browser.mozilla) ? 'ogg' : 'mp3';
-		
-		var getAudioUrl = function(url){
-			return url.replace(/{ext}/,audioFileExtension);
-		};		
-
-		snd.manager.add('9mm',getAudioUrl('sounds/9mm.{ext}'));
-		snd.manager.add('zombie1',getAudioUrl('sounds/zombie1.{ext}'));
-		snd.manager.add('zombie2',getAudioUrl('sounds/zombie2.{ext}'));
-		snd.manager.add('zombie3',getAudioUrl('sounds/zombie3.{ext}'));
-		snd.manager.add('zombie4',getAudioUrl('sounds/zombie4.{ext}'));
-		snd.manager.add('zombie5',getAudioUrl('sounds/zombie5.{ext}'));
-		snd.manager.add('zombie_killed',getAudioUrl('sounds/zombie_dies.{ext}'));
-		snd.manager.add('nightfall',getAudioUrl('sounds/nightfall.{ext}'));
-		snd.manager.add('pistol_empty',getAudioUrl('sounds/pistol_empty.{ext}'));
-		snd.manager.add('pistol_reload',getAudioUrl('sounds/pistol_reload.{ext}'));
-		snd.loops = {};
-		snd.loops.ambient = (browser.safari) ?  new MockSoundLoop() : new SoundLoop('ambient',getAudioUrl('sounds/e.{ext}'));	
-	}());
-	
-	load(function() {
+	var onGameLoaded = function() {
 		obj.world = {
 			isDebug: false,
 			defaults: {
@@ -1485,19 +1374,14 @@ define(["propulsion_1.2"], function(PP) {
 		
 		loop.active = true;
 		loop.room = rm.gameMenu;
-	});
+	};
 	
 	/* hacky approach to enable game start on mobile devices */
 	var startGameByTouchEvent = false;
 	
 	var onLoadCompleted = function(){
-		alert(1);
 		document.body.addEventListener("touchstart",	function(evt) {
-			alert(2);
-				if(evt.touches && evt.length > 0){
-					alert(3);
-					startGameByTouchEvent = true;
-				}
+				startGameByTouchEvent = true;
 			}, 
 			false
 		);
