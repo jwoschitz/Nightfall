@@ -22,8 +22,13 @@
  *	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  *	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-define(["propulsion_1.2","sound/sound"], function(PP, sound) {
-	var spr=PP.spr,rm=PP.rm,obj=PP.obj,snd=PP.snd,global=PP.global,Alarm=PP.Alarm,collision=PP.collision,draw=PP.draw,init=PP.init,key=PP.key,load=PP.load,loop=PP.loop,mouse=PP.mouse,Sprite=PP.Sprite;
+define(["engine/core","game/sound"], function(engine, snd) {
+	var PP = engine.propulsion;
+	
+	var spr=PP.spr,rm=PP.rm,Alarm=PP.Alarm,collision=PP.collision,draw=PP.draw,init=PP.init,key=PP.key,loop=PP.loop,mouse=PP.mouse,Sprite=PP.Sprite;
+	
+	var global = {},
+		obj = {};
 	
 	var Rotation = function(radians){
 		this.radians = radians || 0;
@@ -87,9 +92,6 @@ define(["propulsion_1.2","sound/sound"], function(PP, sound) {
 	spr.tilemap.grass2 = new Sprite('sprites/tilemap/G000M802.png',1,0,0);
 	
 	spr.menubg = new Sprite('sprites/menu.png',1,0,0);
-	
-	//SOUND
-  snd = sound;
 	
 	var onGameLoaded = function() {
 		obj.world = {
@@ -1388,20 +1390,22 @@ define(["propulsion_1.2","sound/sound"], function(PP, sound) {
 	}
 	
 	var loadingBar = document.getElementById('loadingmask');
-	var showLoadStatus = function(){
-		if(load.total == load.completed){
+
+	var showLoadStatus = function(itemsToLoad){
+		var itemsLoaded = PP.load.completed;
+		if(itemsToLoad == itemsLoaded){
 			loadingBar.innerHTML = 'Completed';
 			onLoadCompleted();
 			return;
 		}
-		loadingBar.innerHTML = 'Loading - ' + load.completed + ' of ' + load.total;
+		loadingBar.innerHTML = 'Loading - ' + itemsLoaded + ' of ' + itemsToLoad;
 		setTimeout(showLoadStatus, 30);
 	}
   
   return {
     init: function(){      
-      load(onGameLoaded);
-      showLoadStatus();
+      engine.load(onGameLoaded);
+      showLoadStatus(PP.load.total);
     }
   }
 });

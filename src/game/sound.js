@@ -1,4 +1,4 @@
-define(["utils/browserDetection","sound/SoundManager", "sound/SoundLoop"], function(browser, SoundManager, SoundLoop) {
+define(["utils/browserDetection","engine/sound/SoundManager", "engine/sound/SoundLoop"], function(browser, SoundManager, SoundLoop) {
   var maxAudioChannels = 10;
   var soundManager = new SoundManager(maxAudioChannels);
   

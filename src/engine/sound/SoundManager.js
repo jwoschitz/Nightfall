@@ -1,5 +1,6 @@
-define(["utils/browserDetection","propulsion_1.2"], function(browser, engine) {
-  var SoundManager = function(maxChannels){
+define(["engine/sound/Sound"], function(Sound) {
+	
+	var SoundManager = function(maxChannels){
 		this.audiochannels = [];    
 		this.sounds = {};
 		for (var i=0;i<maxChannels;i++) {									
@@ -8,12 +9,12 @@ define(["utils/browserDetection","propulsion_1.2"], function(browser, engine) {
 				finished: -1
 			};
 		}
-    /* @TODO getAudioObj is it needed somewhere? */
+		/* @TODO getAudioObj is it needed somewhere? */
 		this.getAudioObj = function(name){
 			return this.sounds[name];
 		};
 		this.add = function(name, url){
-			this.sounds[name] = new engine.Sound(url);
+			this.sounds[name] = new Sound(url);
 		};
 		this.play = function(name, volume){		
 			var audioObj = this.sounds[name];
@@ -33,10 +34,5 @@ define(["utils/browserDetection","propulsion_1.2"], function(browser, engine) {
 		return this;
 	};
   
-  var MockSoundManager = function(){
-		this.add = function(){};
-		this.play = function(){};
-	}
-  
-  return (browser.safari) ? MockSoundManager : SoundManager;
+	return SoundManager;
 });

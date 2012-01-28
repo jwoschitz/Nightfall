@@ -1,6 +1,7 @@
-define(["utils/browserDetection","propulsion_1.2"], function(browser, engine) {
+define(["engine/sound/Sound"], function(Sound) {
+	
 	var SoundLoop = function(name, url){
-		var audioObj = new engine.Sound(url);
+		var audioObj = new Sound(url);
 		this.channel = {};		
 		this.channel.audioObj = audioObj;
 		this.channel.finished = (new Date()).getTime() + audioObj.duration * 1000;
@@ -26,10 +27,5 @@ define(["utils/browserDetection","propulsion_1.2"], function(browser, engine) {
 		return this;
 	}
   
-  var MockSoundLoop = function(){
-		this.play = function(){};
-		this.stop = function(){};
-	}
-  
-  return (browser.safari) ? MockSoundLoop : SoundLoop;
+	return SoundLoop;
 });
