@@ -46,22 +46,6 @@ define(["engine/core","game/sound"], function(engine, snd) {
 		};
 		return this;
 	};
-	
-	if(!Object.extend){
-		Object.extend = function(obj, extObj) {		
-			var cloneObj = Object.create(extObj);
-			if (arguments.length > 2) {
-				for (var a = 1; a < arguments.length; a++) {
-					this.extend(obj, arguments[a]);
-				}
-			} else {
-				for (var i in cloneObj) {
-					obj[i] = cloneObj[i];
-				}
-			}
-			return obj;
-		};
-	}
   
 	var move = {
 		direction: function(obj,angle,length, precise) {

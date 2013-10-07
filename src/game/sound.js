@@ -1,8 +1,8 @@
-define(["utils/browserDetection","engine/sound/SoundManager", "engine/sound/SoundLoop"], function(browser, SoundManager, SoundLoop) {
+define(["engine/UA","engine/sound/SoundManager", "engine/sound/SoundLoop"], function(UA, SoundManager, SoundLoop) {
   var maxAudioChannels = 10;
   var soundManager = new SoundManager(maxAudioChannels);
   
-  var audioFileExtension = (browser.mozilla) ? 'ogg' : 'mp3';
+  var audioFileExtension = (UA.mozilla) ? 'ogg' : 'mp3';
   
   var getAudioUrl = function(url){
     return url.replace(/{ext}/,audioFileExtension);

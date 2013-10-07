@@ -1,4 +1,4 @@
-define(["utils/browserDetection", "engine/loader"], function(browser, loader) {
+define(["engine/UA", "engine/loader"], function(UA, loader) {
 
 	var Sound = function(url) {
       var audObj = new Audio('');
@@ -10,7 +10,7 @@ define(["utils/browserDetection", "engine/loader"], function(browser, loader) {
       loader.queueAudio(audObj);
       
       return audObj;
-    }
+    };
 	
 	var MockSound = function() {
 		return {
@@ -18,7 +18,7 @@ define(["utils/browserDetection", "engine/loader"], function(browser, loader) {
 			pause: function() {},
 			load: function() {}
 		}
-	}
+	};
 	
-	return (browser.safari) ? MockSound : Sound;
+	return (UA.safari) ? MockSound : Sound;
 });
