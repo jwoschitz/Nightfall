@@ -1,29 +1,31 @@
-define(["engine/UA","engine/sound/SoundManager", "engine/sound/SoundLoop"], function(UA, SoundManager, SoundLoop) {
-  var maxAudioChannels = 10;
-  var soundManager = new SoundManager(maxAudioChannels);
-  
-  var audioFileExtension = (UA.mozilla) ? 'ogg' : 'mp3';
-  
-  var getAudioUrl = function(url){
-    return url.replace(/{ext}/,audioFileExtension);
-  };		
+define(["engine/UA", "engine/core"], function (UA, engine) {
 
-  soundManager.add('9mm',getAudioUrl('sounds/9mm.{ext}'));
-  soundManager.add('zombie1',getAudioUrl('sounds/zombie1.{ext}'));
-  soundManager.add('zombie2',getAudioUrl('sounds/zombie2.{ext}'));
-  soundManager.add('zombie3',getAudioUrl('sounds/zombie3.{ext}'));
-  soundManager.add('zombie4',getAudioUrl('sounds/zombie4.{ext}'));
-  soundManager.add('zombie5',getAudioUrl('sounds/zombie5.{ext}'));
-  soundManager.add('zombie_killed',getAudioUrl('sounds/zombie_dies.{ext}'));
-  soundManager.add('nightfall',getAudioUrl('sounds/nightfall.{ext}'));
-  soundManager.add('pistol_empty',getAudioUrl('sounds/pistol_empty.{ext}'));
-  soundManager.add('pistol_reload',getAudioUrl('sounds/pistol_reload.{ext}'));
-  
-  var soundLoops = {};
-  soundLoops['ambient'] = new SoundLoop('ambient',getAudioUrl('sounds/e.{ext}'));
+    var maxAudioChannels = 10,
 
-  return {
-    manager: soundManager,
-    loops: soundLoops
-  }
+        audioFileExtension = (UA.mozilla) ? '.ogg' : '.mp3',
+
+        soundManager = new engine.sound.SoundManager(maxAudioChannels),
+
+        getSound = function (url) {
+            return engine.getResourceManager().getSoundFromUrl(url + audioFileExtension);
+        };
+
+    soundManager.add('9mm', getSound('sounds/9mm'));
+    soundManager.add('zombie1', getSound('sounds/zombie1'));
+    soundManager.add('zombie2', getSound('sounds/zombie2'));
+    soundManager.add('zombie3', getSound('sounds/zombie3'));
+    soundManager.add('zombie4', getSound('sounds/zombie4'));
+    soundManager.add('zombie5', getSound('sounds/zombie5'));
+    soundManager.add('zombie_killed', getSound('sounds/zombie_dies'));
+    soundManager.add('nightfall', getSound('sounds/nightfall'));
+    soundManager.add('pistol_empty', getSound('sounds/pistol_empty'));
+    soundManager.add('pistol_reload', getSound('sounds/pistol_reload'));
+
+    var soundLoops = {};
+    soundLoops['ambient'] = new engine.sound.SoundLoop(getSound('sounds/e'));
+
+    return {
+        manager: soundManager,
+        loops: soundLoops
+    }
 });
