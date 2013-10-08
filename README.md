@@ -17,7 +17,7 @@ It lacks:
 
 In the current state the game is just a basic tech-demo. Feel free to re-use components as you like.
 
-# Credits
+## Credits
 
 * Music: [Brandon Morris](http://opengameart.org/users/brandon-morris)
 * Sounds: [Brandon Morris](http://opengameart.org/users/brandon-morris)
